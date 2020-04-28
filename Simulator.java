@@ -37,7 +37,7 @@ public class Simulator {
     }
 
     /**
-     * Creatres a Simulator.
+     * Creates a Simulator.
      * @param servers Number of servers.
      * @param selfCheck NUmber of self-checkout counters.
      */
