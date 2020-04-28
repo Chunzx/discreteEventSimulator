@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.PriorityQueue;
 
+/**
+ * A class for discrete event simulation.
+ * Simulates Customers arriving and being served by Servers.
+ */
 public class Simulator {
     public static final int ARRIVED = 0;
     public static final int WAIT = 1;
