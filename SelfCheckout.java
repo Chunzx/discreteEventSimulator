@@ -31,7 +31,7 @@ class SelfCheckout extends Server {
     
     /**
      * Gets the lane number of the queue this counter is serving.
-     * @return Lane number among all the queues in the store that the counter is serving
+     * @return Lane number among all the queues in the store that the counter is serving.
      */
     @Override
     int getQueueID() {

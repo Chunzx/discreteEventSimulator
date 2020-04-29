@@ -18,7 +18,7 @@ class GreedyCustomer extends Customer {
     }
 
     /**
-     * Finds the Server with smallest queue size.
+     * Since this is a GreedyCustomer, findServer finds the Server with smallest queue size.
      * @param servers List of Servers.
      * @param queue All queues in the store.
      * @param limit Maximum queue length.

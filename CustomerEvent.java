@@ -12,7 +12,7 @@ class CustomerEvent implements Event {
     private final int state;  
 
     /**
-     * Creates a new CustomerEvent with id, time, state and whether it is greedy.
+     * Creates a new CustomerEvent with id, time and state.
      * @param customer Customer in the Event.
      * @param time Time of the Event.
      * @param state State of the Event, ARRIVED (0) or LEAVE (3).
@@ -51,7 +51,7 @@ class CustomerEvent implements Event {
     }
 
     /**
-     * Returns a String description of the CustomerEvent
+     * Returns a String description of the CustomerEvent.
      * Description contains the time and Customer involved.
      * @return String representaton of CustomerEvent.
      */

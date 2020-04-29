@@ -20,7 +20,7 @@ class Customer {
     /**
      *Creates a Customer with an Id,status, time.
      * Status is his most recent activity, i.e. arrival, wait, serve, done or leave.
-     * Time is the time of his most recent event, i.e. arrival, wait, serve, done or leave.
+     * Time is the time of his most recent activity, i.e. arrival, wait, serve, done or leave.
      */
     Customer(int id,int status, double time) {
         this.id = id;

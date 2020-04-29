@@ -37,7 +37,7 @@ public class Simulator {
     /**
      * Creates a Simulator.
      * @param servers Number of servers.
-     * @param selfCheck NUmber of self-checkout counters.
+     * @param selfCheck Number of self-checkout counters.
      */
     public Simulator(int servers, int selfCheck) {
         serverList = new ArrayList<>();
