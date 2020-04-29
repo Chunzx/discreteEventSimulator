@@ -56,7 +56,8 @@ class CustomerServerEvent implements Event {
 
     /**
      * Returns a String description of the Event.
-     * Description contains the time of Event, Customer, Server and the interaction between them.
+     * Description contains the time of Event, Customer, Server
+     * and the type of interaction between them.
      * @return String representation of this Event.
      */
     @Override

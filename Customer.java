@@ -18,7 +18,7 @@ class Customer {
     private final double time;
 
     /**
-     *Creates a Customer with an Id,status, time.
+     *Creates a Customer with an Id, status, time.
      * Status is his most recent activity, i.e. arrival, wait, serve, done or leave.
      * Time is the time of his most recent activity, i.e. arrival, wait, serve, done or leave.
      */

@@ -49,7 +49,7 @@ class SelfCheckout extends Server {
     }
 
     /**
-     * Generates resting probability, since this is a Self-checkout counter, it never rests.
+     * Generates resting probability. Since this is a Self-checkout counter, it never rests.
      * @return -1
      */
     @Override

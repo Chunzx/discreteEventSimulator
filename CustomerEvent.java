@@ -52,7 +52,7 @@ class CustomerEvent implements Event {
 
     /**
      * Returns a String description of the CustomerEvent.
-     * Description contains the time and Customer involved.
+     * Description contains the time and String representation of Customer involved.
      * @return String representaton of CustomerEvent.
      */
     @Override

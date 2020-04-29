@@ -69,7 +69,8 @@ public class Simulator {
     }
 
     /**
-     * Simulate the flow of Events when Customers arrive and add all Events to PriorityQueue.
+     * Simulate the flow of Events when Customers arrive and add all Events to
+     * PriorityQueue pq.
      * @param count Number of Customers to be served.
      * @param limit Maximum queue length.
      * @param pq PriorityQueue of Events.

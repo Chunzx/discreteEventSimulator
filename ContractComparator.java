@@ -13,6 +13,7 @@ class ContractComparator implements Comparator<Contract> {
     static final int LEAVE = 4;
 
     /**
+     * Compares the order of two Contracts.
      * A contract may not contain a Customer. 
      * If both contracts have no customers, compare the time of the Server's next available time. 
      * If they are equal, return 0.
