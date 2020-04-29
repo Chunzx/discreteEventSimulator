@@ -50,6 +50,11 @@ class CustomerEvent implements Event {
         return state;
     }
 
+    /**
+     * Returns a String description of the CustomerEvent
+     * Description contains the time and Customer involved.
+     * @return String representaton of CustomerEvent.
+     */
     @Override
     public String toString() {
         if (state == ARRIVED) {

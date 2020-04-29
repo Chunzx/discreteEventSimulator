@@ -78,6 +78,10 @@ class Customer {
         return status;
     }
 
+    /**
+     * Returns a String representation of a Customer which is simply his Id.
+     * @return Strng representaton of a Customer.
+     */
     public String toString() {
         return String.format("%d", getID());
     }

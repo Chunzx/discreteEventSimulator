@@ -77,6 +77,10 @@ class Server {
         return rd.genRandomRest();
     }
 
+    /**
+     * Returns a String representaton of a Server object which contains the Server label and its Id.
+     * @return String representation of a Server.
+     */
     public String toString() {
         return String.format("server %d",id);
     }

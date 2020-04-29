@@ -57,6 +57,11 @@ class SelfCheckout extends Server {
         return -1;
     }
 
+    /**
+     * Returns a String description of a SelfCheckout object.
+     * Description contains the Selfcheckout label and its Id.
+     * @return String representaton of a SelfCheckout object.
+     */
     public String toString() {
         return String.format("self-check %d", getID());
     }

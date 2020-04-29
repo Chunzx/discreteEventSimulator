@@ -54,6 +54,11 @@ class CustomerServerEvent implements Event {
         return state;
     }
 
+    /**
+     * Returns a String description of the Event.
+     * Description contains the time of Event, Customer, Server and the interaction between them.
+     * @return String representation of this Event.
+     */
     @Override
     public String toString() {
         if (state == WAIT) {

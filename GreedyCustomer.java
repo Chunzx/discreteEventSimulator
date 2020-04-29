@@ -40,7 +40,11 @@ class GreedyCustomer extends Customer {
         }
         return leastQueue == -1 ? null : servers.get(leastQueue - 1);
     }
-    
+
+    /**
+     * Returns a String representation of a GreedyCustomer which contains his Id and greedy label.
+     * @return String representaton of GreedyCustomer.
+     */
     @Override
     public String toString() {
         return String.format("%d(greedy)", getID());
