@@ -69,11 +69,16 @@ class Server {
     }
 
     /**
-     * Checks if Server is a self-checkout counter.
-     * @return false.
+     *Generates probability that this Server will rest.
+     *@param rd RandomGenerator object used for generating probability.
+     *@return Probability Server will rest.
      */
-    boolean isSelf() {
-        return false;
+    double genRestProb(RandomGenerator rd) {
+        return rd.genRandomRest();
+    }
+
+    public String toString() {
+        return String.format("server %d",id);
     }
 }
 

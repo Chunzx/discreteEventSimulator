@@ -7,32 +7,20 @@ package cs2030.simulator;
 class CustomerEvent implements Event {
     static final int ARRIVED = 0;
     static final int LEAVE = 3;
-    private final int id;
+    private final Customer customer;
     private final double time;
     private final int state;  
-    private final boolean isGreedy;
 
     /**
      * Creates a new CustomerEvent with id, time, state and whether it is greedy.
-     * @param id Id of Customer.
-     * @param time Time of Event.
+     * @param customer Customer in the Event.
+     * @param time Time of the Event.
      * @param state State of the Event, ARRIVED (0) or LEAVE (3).
-     * @param isGreedy whether Customer is greedy.
      */
-    CustomerEvent(int id, double time, int state, boolean isGreedy) {
-        this.id = id;
+    CustomerEvent(Customer customer, double time, int state) {
+        this.customer = customer;
         this.time = time;
         this.state = state;
-        this.isGreedy = isGreedy;
-    }
-
-    /**
-     * Gets Id of Customer.
-     * @return id of CustomerEvent.
-     */
-    @Override
-    public int getID() {
-        return this.id;
     }
 
     /**
@@ -42,6 +30,15 @@ class CustomerEvent implements Event {
     @Override
     public double getTime() {
         return this.time;
+    }
+    
+    /**
+     * Gets Id of Customer.
+     *@return Id of Customer.
+     */
+    @Override
+    public int getID() {
+        return customer.getID();
     }
 
     /**
@@ -53,27 +50,12 @@ class CustomerEvent implements Event {
         return state;
     }
 
-    /**
-     * Checks whether Customer is greedy.
-     * @return whether Customer is greedy.
-     */
-    public boolean isGreedy() {
-        return isGreedy;
-    }
-
     @Override
     public String toString() {
-        if (isGreedy) {
-            if (state == LEAVE) {
-                return String.format("%.3f %d(greedy) leaves", time, id);
-            } else {
-                return String.format("%.3f %d(greedy) arrives", time, id);
-            }
-        }
-        if (state == LEAVE) {
-            return String.format("%.3f %d leaves", time, id);
+        if (state == ARRIVED) {
+            return String.format("%.3f %s arrives", time, customer.toString());
         } else {
-            return String.format("%.3f %d arrives", time, id);
+            return String.format("%.3f %s leaves", time, customer.toString());
         }
     }
 }

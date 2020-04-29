@@ -49,11 +49,15 @@ class SelfCheckout extends Server {
     }
 
     /**
-     * Checks whether the Server is a self-checkout object.
-     * @return true since this is a selfCheckout object.
+     * Generates resting probability, since this is a Self-checkout counter, it never rests.
+     * @return -1
      */
     @Override
-    boolean isSelf() {
-        return true;
+    double genRestProb(RandomGenerator rd) {
+        return -1;
+    }
+
+    public String toString() {
+        return String.format("self-check %d", getID());
     }
 }

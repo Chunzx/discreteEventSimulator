@@ -1,5 +1,8 @@
 package cs2030.simulator;
 
+import java.util.Map;
+import java.util.List;
+
 /**
  * A class representing a Customer.
  * A Customer has a status and an Event associated with it.
@@ -12,27 +15,27 @@ class Customer {
     static final int LEAVE = 4;
     private final int status;
     private final int id;
-    private final Event currentEvent;
-    private final boolean isGreedy;
+    private final double time;
 
     /**
-     *Creates a Customer with an Id,status, Event.
-     *Customer can be greedy or non-greedy.
+     *Creates a Customer with an Id,status, time.
+     * Status is his most recent activity, i.e. arrival, wait, serve, done or leave.
+     * Time is the time of his most recent event, i.e. arrival, wait, serve, done or leave.
      */
-    Customer(int id,int status, Event first, boolean isGreedy) {
+    Customer(int id,int status, double time) {
         this.id = id;
         this.status = status;
-        this.currentEvent = first;
-        this.isGreedy = isGreedy;
+        this.time = time;
     }
 
     /**
-     *Sets status of Customer and Event to nextStatus and current.
+     *Sets status of Customer and time to nextStatus and nextTime.
      *@param nextStatus next Status of Customer.
-     *@param nextEvent next Event of customer.
+     *@param nextTime Time of Customer's most recent activity.
+     * @return Customer with updated time and status.
      */
-    Customer setStatus(int nextStatus, Event nextEvent) {
-        return new Customer(id, nextStatus, nextEvent, isGreedy);
+    Customer setStatus(int nextStatus, double nextTime) {
+        return new Customer(id, nextStatus, nextTime);
     }
 
     /**
@@ -40,7 +43,7 @@ class Customer {
      *@return time of Customer's most recent Event.
      */
     double getTime() {
-        return currentEvent.getTime();
+        return time;
     }
 
     /**
@@ -52,6 +55,22 @@ class Customer {
     }
 
     /**
+     * Finds the first server whose queue is not full.
+     * @param servers List of Servers.
+     * @param queue All queues in the store.
+     * @param limit Maximum queue length
+     * @return First server whose queue is not full, null if all are full.
+     */
+    Server findServer(List<Server> servers, Map<Integer, List<Customer>> queue, int limit) {
+        for (int i = 0; i < servers.size(); i++) {
+            if (queue.get(servers.get(i).getQueueID()).size() < limit) {
+                return servers.get(i);
+            }
+        }
+        return null;
+    }
+
+    /**
      * Gets the status of Customer.
      *@return status of Customer.
      */
@@ -59,19 +78,8 @@ class Customer {
         return status;
     }
 
-    /**
-     * Checks whether Customer is greedy.
-     *@return whether Customer is greedy
-     */
-    boolean isGreedy() {
-        return isGreedy;
+    public String toString() {
+        return String.format("%d", getID());
     }
 
-    /**
-     * Gets the most recent Event.
-     *@return Customer's most recent Event.
-     */
-    Event getEvent() {
-        return currentEvent;
-    }
 }
