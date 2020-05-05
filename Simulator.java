@@ -142,6 +142,8 @@ public class Simulator {
                 queue.get(s.getQueueID()).add(c);
                 contracts.poll();
             } else if (status == SERVED) {
+                //if Customer is served, generate time he is done serving
+                // and update the Server availabilty
                 Server s = curr.getServer();
                 double endTime = c.getTime() + rd.genServiceTime();
                 Event doneServe = new CustomerServerEvent(c, endTime,s,DONE);
@@ -154,6 +156,11 @@ public class Simulator {
                 contracts.poll();
                 contracts.add(newContract);
             } else if (status == DONE) {
+                //if Customer is done serving,
+                //generate probability Server will rest,
+                //and if the Server does not rest,
+                //Serve the next Customer in line.
+                //Otherwise update Server availability to time he is done resting.
                 Server s = curr.getServer();
                 double endTime = s.getTime();
                 contracts.poll();
@@ -179,6 +186,7 @@ public class Simulator {
                     contracts.add(newContract);
                 }
             } else if (status == BACK) {
+                //if Server is back from resting, serve the next Customer in line.
                 Server s = curr.getServer();
                 contracts.poll();
                 double endTime = s.getTime();

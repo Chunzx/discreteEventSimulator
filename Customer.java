@@ -18,9 +18,10 @@ class Customer {
     private final double time;
 
     /**
-     *Creates a Customer with an Id, status, time.
-     * Status is his most recent activity, i.e. arrival, wait, serve, done or leave.
-     * Time is the time of his most recent activity, i.e. arrival, wait, serve, done or leave.
+     * Creates a Customer with an Id,status, time.
+     * @param id Identification of Customer.
+     * @param status Status is his most recent activity, i.e. arrival, wait, serve, done or leave.
+     * @param time Time of his most recent activity, i.e. arrival, wait, serve, done or leave.
      */
     Customer(int id,int status, double time) {
         this.id = id;

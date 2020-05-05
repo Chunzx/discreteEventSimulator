@@ -8,10 +8,17 @@ import java.util.Map;
  */
 class GreedyCustomer extends Customer {
 
+    /**
+     * Creates a GreedyCustomer with an Id,status, time.
+     * @param id Identification of Customer.
+     * @param status Status is his most recent activity, i.e. arrival, wait, serve, done or leave.
+     * @param time Time of his most recent activity, i.e. arrival, wait, serve, done or leave.
+     */
     GreedyCustomer(int id, int status, double time) {
         super(id,status,time);
     }
-    
+
+
     @Override
     GreedyCustomer setStatus(int nextStatus, double nextTime) {
         return new GreedyCustomer(getID(), nextStatus, nextTime);
