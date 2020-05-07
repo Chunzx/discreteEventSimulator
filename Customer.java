@@ -12,8 +12,7 @@ class Customer {
     static final int WAIT = 1;
     static final int SERVED = 2;
     static final int DONE = 3;
-    static final int LEAVE = 4;
-    private final int status;
+    private final Status status;
     private final int id;
     private final double time;
 
@@ -23,7 +22,7 @@ class Customer {
      * @param status Status is his most recent activity, i.e. arrival, wait, serve, done or leave.
      * @param time Time of his most recent activity, i.e. arrival, wait, serve, done or leave.
      */
-    Customer(int id,int status, double time) {
+    Customer(int id, Status status, double time) {
         this.id = id;
         this.status = status;
         this.time = time;
@@ -35,7 +34,7 @@ class Customer {
      *@param nextTime Time of Customer's most recent activity.
      * @return Customer with updated time and status.
      */
-    Customer setStatus(int nextStatus, double nextTime) {
+    Customer setStatus(Status nextStatus, double nextTime) {
         return new Customer(id, nextStatus, nextTime);
     }
 
@@ -64,7 +63,7 @@ class Customer {
      */
     Server findServer(List<Server> servers, Map<Integer, List<Customer>> queue, int limit) {
         for (int i = 0; i < servers.size(); i++) {
-            if (queue.get(servers.get(i).getQueueID()).size() < limit) {
+            if (queue.get(servers.get(i).getQueueId()).size() < limit) {
                 return servers.get(i);
             }
         }
@@ -75,7 +74,7 @@ class Customer {
      * Gets the status of Customer.
      *@return status of Customer.
      */
-    int getStatus() {
+    Status getStatus() {
         return status;
     }
 

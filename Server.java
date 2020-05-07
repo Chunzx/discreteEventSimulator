@@ -44,9 +44,13 @@ class Server {
 
     /**
      * Gets the lane number of the queue this Server is serving.
+     * In the case of a human Server, it returns the value of its Id 
+     * since it has a queue unique to itself. 
+     * This may not be the case for other types of Servers, hence this method is present
+     * To allow a different implementation in child classes.
      * @return Which lane among all the queues this Server is serving.
      */
-    int getQueueID() {
+    int getQueueId() {
         return id;
     }
 

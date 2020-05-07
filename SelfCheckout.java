@@ -6,27 +6,31 @@ package cs2030.simulator;
  * the only difference is it shares a unified queue with all other self-checkout counters.
  */
 class SelfCheckout extends Server {
-    private final int queueID;
+
+    /**
+     *Queue number shared by all SelfCheckout counters.
+     * Since this value is identical for all SelfCheckout objects, 
+     * it is a static variable.
+     */
+    private static int queueId;
+    private static boolean hasValue = false; 
     
     /**
      * Creates a new SelfCheckout object able to serve Customers immediately.
      * @param id ID of counter.
-     * @param queueID Lane number that the counter is serving.
      */
-    SelfCheckout(int id, int queueID) {
+    SelfCheckout(int id) {
         super(id);
-        this.queueID = queueID;
     }
+
 
     /**
      * Creates a new Selfcheckout object able to serve Customers after a specified time.
      * @param id ID of counter.
-     * @param queueID Lane number that the counter is serving.
      * @param time Time counter is available to serve Customers.
      */
-    SelfCheckout(int id, int queueID, double time) {
+    SelfCheckout(int id,double time) {
         super(id, time);
-        this.queueID = queueID;
     }
     
     /**
@@ -34,8 +38,8 @@ class SelfCheckout extends Server {
      * @return Lane number among all the queues in the store that the counter is serving.
      */
     @Override
-    int getQueueID() {
-        return queueID;
+    int getQueueId() {
+        return queueId;
     }
 
     /**
@@ -45,8 +49,20 @@ class SelfCheckout extends Server {
      */
     @Override
     SelfCheckout setNextTime(double time) {
-        return new SelfCheckout(getID(),queueID,time);
+        return new SelfCheckout(getID(),time);
     }
+
+    /**
+     * Sets the value of queueID, if it hasn't been set yet.
+     * @param id Queue id shared by all Self-Checkout counters.
+     */
+    static void setQueueId(int id) {
+        if (!hasValue) {
+            hasValue = true;
+            queueId = id;
+        }
+    }
+        
 
     /**
      * Generates resting probability. Since this is a Self-checkout counter, it never rests.

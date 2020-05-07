@@ -76,9 +76,9 @@ class Contract {
      * Gets the status of the Contract.
      *@return status of Contract.
      */
-    int getStatus() {
+    Status getStatus() {
         if (c == null) {
-            return BACK;
+            return Status.BACK;
         }
         return c.getStatus();
     }

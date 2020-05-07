@@ -14,13 +14,13 @@ class GreedyCustomer extends Customer {
      * @param status Status is his most recent activity, i.e. arrival, wait, serve, done or leave.
      * @param time Time of his most recent activity, i.e. arrival, wait, serve, done or leave.
      */
-    GreedyCustomer(int id, int status, double time) {
+    GreedyCustomer(int id, Status status, double time) {
         super(id,status,time);
     }
 
 
     @Override
-    GreedyCustomer setStatus(int nextStatus, double nextTime) {
+    GreedyCustomer setStatus(Status nextStatus, double nextTime) {
         return new GreedyCustomer(getID(), nextStatus, nextTime);
     }
 
@@ -35,13 +35,13 @@ class GreedyCustomer extends Customer {
     Server findServer(List<Server> servers, Map<Integer,List<Customer>> queue, int limit) {
         int leastQueue = -1;
         for (int i = 0; i < servers.size(); i++) {
-            if (queue.get(servers.get(i).getQueueID()).size() < limit) {
+            if (queue.get(servers.get(i).getQueueId()).size() < limit) {
                 if (leastQueue == -1) {
-                    leastQueue = servers.get(i).getQueueID();
+                    leastQueue = servers.get(i).getQueueId();
                 } else {
-                    leastQueue = queue.get(servers.get(i).getQueueID()).size() < 
+                    leastQueue = queue.get(servers.get(i).getQueueId()).size() < 
                     queue.get(leastQueue).size() ? 
-                    servers.get(i).getQueueID() : leastQueue;
+                    servers.get(i).getQueueId() : leastQueue;
                 }
             }
         }

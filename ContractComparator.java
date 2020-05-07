@@ -46,8 +46,8 @@ class ContractComparator implements Comparator<Contract> {
             if (firstId - secondId != 0) {
                 return firstId < secondId ? -1 : 1;
             }
-            int firstStatus = a.getStatus();
-            int secondStatus = b.getStatus();
+            int firstStatus = a.getStatus().getCode();
+            int secondStatus = b.getStatus().getCode();
             if (firstStatus - secondStatus != 0) {
                 return firstStatus < secondStatus ? -1 : 1;
             } else {

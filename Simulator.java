@@ -12,12 +12,6 @@ import java.util.PriorityQueue;
  * Simulates Customers arriving and being served by Servers.
  */
 public class Simulator {
-    public static final int ARRIVED = 0;
-    public static final int WAIT = 1;
-    public static final int SERVED = 2;
-    public static final int LEAVE = 3;
-    public static final int DONE = 4;
-    public static final int BACK = 5;
     private final List<Server> serverList;
     private final HashMap<Integer, List<Customer>> queue;
 
@@ -48,9 +42,11 @@ public class Simulator {
         }
         //add a unified queue for self checkout counters
         queue.put(servers + 1, new LinkedList<Customer>());
+        //instantiate queue number for all Selfcheckout counters
+        SelfCheckout.setQueueId(servers + 1);
         //create self checkout counters
         for (int i = servers + 1; i <= servers + selfCheck; i++) {
-            serverList.add(new SelfCheckout(i, servers + 1));
+            serverList.add(new SelfCheckout(i));
         }
     }
 
@@ -73,7 +69,6 @@ public class Simulator {
      * PriorityQueue pq.
      * @param count Number of Customers to be served.
      * @param limit Maximum queue length.
-     * @param pq PriorityQueue of Events.
      * @param seed Seed for RandomGenerator object.
      * @param lambda Arrival rate.
      * @param mu Service rate.
@@ -82,7 +77,7 @@ public class Simulator {
      * @param greedyProb Probability of encountering a greedy Customer.
      * @return double Array which stores the number of Customers who left and total waiting time.
      */
-    public double[] serve(int count, int limit, PriorityQueue<Event> pq, int seed, double lambda, 
+    public double[] serve(int count, int limit, int seed, double lambda, 
             double mu, double rho, double prob, double greedyProb) {
         RandomGenerator rd = new RandomGenerator(seed, lambda, mu, rho);
         PriorityQueue<Contract> contracts = new PriorityQueue<>(1, new ContractComparator());
@@ -92,29 +87,26 @@ public class Simulator {
         for (int i = 1; i <= count; i++) {
             double greedy = rd.genCustomerType();
             boolean isGreedy = greedy < greedyProb;
-            Customer c = isGreedy ? new GreedyCustomer(i, ARRIVED, currentTime) 
-                : new Customer(i, ARRIVED, currentTime);
-            Event arrival = new CustomerEvent(c,currentTime,ARRIVED);
-            pq.add(arrival);
+            Customer c = isGreedy ? new GreedyCustomer(i, Status.ARRIVED, currentTime) 
+                : new Customer(i, Status.ARRIVED, currentTime);
             Contract contract = new Contract(c);
             contracts.add(contract);
             currentTime += rd.genInterArrivalTime();
         }
         while (contracts.size() > 0) {
-            Contract curr = contracts.peek();
+            Contract curr = contracts.poll();
             Customer c = curr.getCustomer();
-            int status = curr.getStatus();
-            if (status == ARRIVED) {
-                double arrivalTime = curr.getTime();
+            Status status = curr.getStatus();
+            if (status == Status.ARRIVED) {
+                double arrivalTime = c.getTime();
+                System.out.println(String.format("%.3f %s arrives", arrivalTime, c));
                 Server server = findServer(arrivalTime);
                 //if Server is available, Customer is immediately served.
                 if (server != null) {
                     Server s = server;
-                    Event serve = new CustomerServerEvent(c, arrivalTime, s, SERVED);
-                    pq.add(serve);
-                    c = c.setStatus(SERVED, arrivalTime);
+                    System.out.println(String.format("%.3f %s served by %s", arrivalTime, c, s));
+                    c = c.setStatus(Status.SERVED, arrivalTime);
                     curr = new Contract(c, s);
-                    contracts.poll();
                     contracts.add(curr);
                     continue;
                 } else {
@@ -122,40 +114,33 @@ public class Simulator {
                     //according to his preference (greedy or non-greedy).
                     Server s = c.findServer(serverList,queue,limit);
                     if (s != null) {
-                        Event wait = new CustomerServerEvent(c, arrivalTime, s, WAIT);
-                        pq.add(wait);
-                        c = c.setStatus(WAIT, arrivalTime);
+                        System.out.println(String.format("%.3f %s waits to be served by %s", 
+                            arrivalTime, c, s));
+                        c = c.setStatus(Status.WAIT, arrivalTime);
                         curr = new Contract(c,s);
-                        contracts.poll();
                         contracts.add(curr);
                         continue;
                     }
-                    //nothing left to do, remove from contracts
-                    contracts.poll();
-                    Event leave = new CustomerEvent(c,arrivalTime,LEAVE);
-                    pq.add(leave);
+                    //nothing left to do, CUstomer leaves.
+                    System.out.println(String.format("%.3f %s leaves", arrivalTime, c));
                     customersLeft++;
                 }
-            } else if (status == WAIT) { 
+            } else if (status == Status.WAIT) { 
                 //if Customer is waiting, add him to the queue of the server
                 Server s = curr.getServer();
-                queue.get(s.getQueueID()).add(c);
-                contracts.poll();
-            } else if (status == SERVED) {
+                queue.get(s.getQueueId()).add(c);
+            } else if (status == Status.SERVED) {
                 //if Customer is served, generate time he is done serving
                 // and update the Server availabilty
                 Server s = curr.getServer();
                 double endTime = c.getTime() + rd.genServiceTime();
-                Event doneServe = new CustomerServerEvent(c, endTime,s,DONE);
-                pq.add(doneServe);
                 s = s.setNextTime(endTime);
                 //update serverList
                 serverList.set(s.getID() - 1, s);
-                c = c.setStatus(DONE,endTime);
+                c = c.setStatus(Status.DONE,endTime);
                 Contract newContract = new Contract(c,s);
-                contracts.poll();
                 contracts.add(newContract);
-            } else if (status == DONE) {
+            } else if (status == Status.DONE) {
                 //if Customer is done serving,
                 //generate probability Server will rest,
                 //and if the Server does not rest,
@@ -163,7 +148,7 @@ public class Simulator {
                 //Otherwise update Server availability to time he is done resting.
                 Server s = curr.getServer();
                 double endTime = s.getTime();
-                contracts.poll();
+                System.out.println(String.format("%.3f %s done serving by %s", endTime, c, s));
                 double restProb = s.genRestProb(rd);
                 if (restProb != -1 && restProb < prob) {    
                     double nextTime = endTime + rd.genRestPeriod();
@@ -174,30 +159,29 @@ public class Simulator {
                     contracts.add(newContract);
                     continue;
                 }
-                if (queue.get(s.getQueueID()).size() > 0) {
-                    List<Customer> next = queue.get(s.getQueueID());
+                if (queue.get(s.getQueueId()).size() > 0) {
+                    List<Customer> next = queue.get(s.getQueueId());
                     Customer nextInLine = next.remove(0);
                     queue.put(s.getID(), next);
                     totalWaitingTime += endTime - nextInLine.getTime();
-                    Event serve = new CustomerServerEvent(nextInLine, endTime,s,SERVED);
-                    pq.add(serve);
-                    nextInLine = nextInLine.setStatus(SERVED, endTime); 
+                    System.out.println(String.format("%.3f %s served by %s", 
+                        endTime, nextInLine, s));
+                    nextInLine = nextInLine.setStatus(Status.SERVED, endTime); 
                     Contract newContract = new Contract(nextInLine, s);
                     contracts.add(newContract);
                 }
-            } else if (status == BACK) {
+            } else if (status == Status.BACK) {
                 //if Server is back from resting, serve the next Customer in line.
                 Server s = curr.getServer();
-                contracts.poll();
                 double endTime = s.getTime();
-                if (queue.get(s.getQueueID()).size() > 0) {
-                    List<Customer> next = queue.get(s.getQueueID());
+                if (queue.get(s.getQueueId()).size() > 0) {
+                    List<Customer> next = queue.get(s.getQueueId());
                     Customer nextInLine = next.remove(0);
                     queue.put(s.getID(), next);
                     totalWaitingTime += endTime - nextInLine.getTime();
-                    Event serve = new CustomerServerEvent(nextInLine,endTime,s,SERVED);
-                    pq.add(serve);
-                    nextInLine = nextInLine.setStatus(SERVED, endTime);
+                    System.out.println(String.format("%.3f %s served by %s", 
+                        endTime, nextInLine, s));
+                    nextInLine = nextInLine.setStatus(Status.SERVED, endTime);
                     Contract newContract = new Contract(nextInLine, s);
                     contracts.add(newContract);
                 }
